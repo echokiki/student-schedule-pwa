@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#FAF9F6">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icon.png">
+  <title>考情档案与课表系统</title>
+  
+  <!-- Google Fonts for Anthropic Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="index.css?v=9">
+</head>
+<body>
+
+  <!-- Header & Navigation -->
+  <header class="header">
+    <div class="header-main">
+      <div class="header-title">
+        <span class="emoji" style="color:var(--accent-terracotta);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </span>
+        <div>
+          <h1>考情档案与课表系统</h1>
+          <p class="header-subtitle">日程 × 档案 × 学情</p>
+        </div>
+      </div>
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-target="scheduleView">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          我的课表
+        </button>
+        <button class="nav-tab" data-target="studentsView">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          学生档案库
+        </button>
+        <button class="nav-tab" data-target="treesView">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><path d="M10 10v.2A3 3 0 0 1 8.9 16v0H5v0h0a3 3 0 0 1-2.58-4.6l.3-.49a2.99 2.99 0 0 1 2.75-1.38l.14.01a5.98 5.98 0 0 1 11.02-3.13l.21.36a3 3 0 0 1 2.5 4.54l-.45.74a3 3 0 0 1-2.54 1.45L16 13.5"/><path d="M12 22v-8"/></svg>
+          知识树库
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= VIEW: SCHEDULE ================= -->
+  <div id="scheduleView" class="view-section active">
+    <!-- Schedule Header Actions -->
+    <div class="view-toolbar">
+      <div class="week-nav">
+        <button class="btn btn-icon" id="prevWeekBtn" title="上一周">◀</button>
+        <span id="weekRange" class="week-label"></span>
+        <button class="btn btn-icon" id="nextWeekBtn" title="下一周">▶</button>
+        <button class="btn btn-sm" id="todayBtn">回到本周</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar" id="statsBar"></div>
+
+    <!-- Schedule Grid -->
+    <div class="schedule-container">
+      <div class="schedule-grid" id="scheduleGrid"></div>
+    </div>
+  </div>
+
+  <!-- ================= VIEW: STUDENTS ================= -->
+  <div id="studentsView" class="view-section" style="display:none;">
+    <div class="students-container">
+      <!-- Left: Student List -->
+      <div class="student-sidebar">
+        <div class="sidebar-header">
+          <h3>我的学生</h3>
+          <button class="btn btn-sm btn-primary" id="addStudentBtn">＋ 新增</button>
+        </div>
+        <div class="student-list" id="studentList">
+          <!-- Student items will be rendered here -->
+        </div>
+      </div>
+
+      <!-- Right: Student Profile -->
+      <div class="student-profile" id="studentProfile">
+        <div class="empty-profile-hint">请在左侧选择或添加学生</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= VIEW: TREES ================= -->
+  <div id="treesView" class="view-section" style="display:none;">
+    <div class="trees-container">
+      <div class="tree-sidebar" id="treeSidebar">
+        <h3>树模板库</h3>
+        <button class="btn btn-sm" id="importTreeBtn">＋ 导入知识树</button>
+        <div class="tree-list" id="treeList"></div>
+      </div>
+      <div class="tree-viewer" id="treeViewer">
+        <div class="empty-profile-hint">请在左侧选择知识树</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODALS ================= -->
+  
+  <!-- 1. 排课弹窗 (Schedule Slot) -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h2 class="modal-title" id="modalTitle">修改课程</h2>
+      <form id="slotForm">
+        <input type="hidden" id="editSlotId">
+        <input type="hidden" id="editDay">
+        <div class="form-group">
+          <label class="form-label" for="paramStudentId">选择学生</label>
+          <select class="form-input" id="paramStudentId" required></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="startTime">开始时间</label>
+            <input class="form-input" type="time" id="startTime" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="endTime">结束时间</label>
+            <input class="form-input" type="time" id="endTime" required>
+          </div>
+        </div>
+        
+        <div class="form-group" id="recurringZone" style="margin-top:-6px; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+          <input type="checkbox" id="isRecurringCheck" style="width:16px; height:16px; cursor:pointer; margin:0;">
+          <label for="isRecurringCheck" class="form-label" style="margin:0; text-transform:none; letter-spacing:normal; cursor:pointer;">设为每周固定排课（自动延续未来 20 周）</label>
+        </div>
+
+        <!-- 结课计算区 -->
+        <div class="settle-zone" id="settleZone" style="display:none;">
+          <hr>
+          <div class="form-group">
+            <label class="form-label">扣除课时数</label>
+            <input class="form-input" type="number" step="0.5" id="deductHours" readonly>
+            <small class="form-text">系统自动根据时长计算，保存后将从学生余额中扣除</small>
+          </div>
+          <button type="button" class="btn btn-primary settle-action-btn" id="startSettleBtn">✨ 填写下课反馈并结算</button>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-delete" id="deleteBtn" style="display:none">删除排课</button>
+          <button type="button" class="btn" id="cancelBtn">取消</button>
+          <button type="submit" class="btn btn-primary" id="saveSlotBtn">保存排课</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. 下课打卡结账弹窗 (Settle Modal) -->
+  <div class="modal-overlay" id="settleModalOverlay">
+    <div class="modal settle-modal">
+      <h2 class="modal-title">📝 下课反馈与结算</h2>
+      <form id="settleForm">
+        <div class="form-group">
+          <label class="form-label">今日讲解内容</label>
+          <textarea class="form-input" id="settleTopic" rows="2" placeholder="例：等积变形应用、蝴蝶模型" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">已掌握题型</label>
+            <input class="form-input" id="settleMastered" placeholder="例：基础面积计算">
+          </div>
+          <div class="form-group">
+            <label class="form-label">未掌握需加强</label>
+            <input class="form-input" id="settleWeak" placeholder="例：复杂图形构造">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">课后作业与家长配合</label>
+          <textarea class="form-input" id="settleHomework" rows="2" placeholder="督促完成试卷错题订正"></textarea>
+        </div>
+        
+        <!-- Markdown 生成区 -->
+        <div class="md-preview-zone">
+          <label class="form-label">生成的反馈 (Markdown格式)</label>
+          <textarea class="form-input md-result" id="mdResult" rows="4" readonly></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn" id="cancelSettleBtn">返回</button>
+          <button type="button" class="btn btn-primary" id="copyAndSettleBtn">复制反馈 并在档案扣除课时</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. 新增/编辑学生弹窗 -->
+  <div class="modal-overlay" id="studentModalOverlay">
+    <div class="modal">
+      <h2 class="modal-title" id="studentModalTitle">学生信息</h2>
+      <form id="studentForm">
+        <input type="hidden" id="editStudentId">
+        <div class="form-group">
+          <label class="form-label">姓名</label>
+          <input class="form-input" type="text" id="stuName" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">校区</label>
+            <input class="form-input" type="text" id="stuCampus" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">当前剩余课时</label>
+            <input class="form-input" type="number" step="0.5" id="stuBalance" value="0" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">绑定知识树</label>
+          <select class="form-input" id="stuTreeId">
+            <option value="">-- 暂不绑定 --</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn" id="cancelStudentBtn">取消</button>
+          <button type="submit" class="btn btn-primary">保存学生</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. 导入知识树弹窗 -->
+  <div class="modal-overlay" id="treeModalOverlay">
+    <div class="modal">
+      <h2 class="modal-title">导入知识树</h2>
+      <form id="treeForm">
+        <div class="form-group">
+          <label class="form-label">知识树名称 (如：人教版初中数学)</label>
+          <input class="form-input" type="text" id="treeName" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">粘贴知识树大纲 (使用缩进表示层级)</label>
+          <textarea class="form-input" id="treeContent" rows="10" placeholder="第一章 有理数&#10;  正数和负数&#10;  有理数加减法" required></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn" id="cancelTreeBtn">取消</button>
+          <button type="submit" class="btn btn-primary">生成并保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. 录入成绩弹窗 -->
+  <div class="modal-overlay" id="examModalOverlay">
+    <div class="modal">
+      <h2 class="modal-title">录入阶段成绩</h2>
+      <form id="examForm">
+        <div class="form-group">
+          <label class="form-label">考试阶段名称</label>
+          <input class="form-input" type="text" id="examNameInput" placeholder="例：八上期中、第三次月考" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">考试分数</label>
+          <input class="form-input" type="number" step="0.5" id="examScoreInput" placeholder="例：95" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn" id="cancelExamBtn">取消</button>
+          <button type="submit" class="btn btn-primary">保存成绩</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="app.js?v=11"></script>
+  <script>
+    // 强制清除旧的卡顿缓存！
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+  </script>
+</body>
+</html>

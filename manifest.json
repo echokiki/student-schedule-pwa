@@ -1,0 +1,16 @@
+{
+  "name": "我的课表 (教师版)",
+  "short_name": "我的课表",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f8f6f3",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
