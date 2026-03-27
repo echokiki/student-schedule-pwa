@@ -1,0 +1,97 @@
+{
+  "siteName": "Echo 的教育导航网站",
+  "siteDescription": "为您提供最精美、最灵活的教学工具和动画导航",
+  "categories": [
+    {
+      "id": "math_animations",
+      "title": "数学思维",
+      "icon": "calculate",
+      "items": [
+        {
+          "title": "圆柱与圆锥体积关系",
+          "description": "自定义开发：探索同底等高、同体积下的变量关系动态图库",
+          "url": "/animations/cylinder-cone-volume.html",
+          "thumbnail": "",
+          "tags": ["几何", "探究空间"]
+        },
+        {
+          "title": "圆的面积推导",
+          "description": "动态演示圆面积公式推导过程，直观易懂",
+          "url": "#",
+          "thumbnail": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=337&fit=crop",
+          "tags": ["数学", "六年级"]
+        },
+        {
+          "title": "图形与几何改变",
+          "description": "立体图形的表面积和体积变化",
+          "url": "#",
+          "thumbnail": "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600&h=337&fit=crop",
+          "tags": ["几何", "综合"]
+        },
+        {
+          "title": "圆周长与面积关系",
+          "description": "互动演示周长一定面积最大，面积一定周长最短",
+          "url": "#",
+          "thumbnail": "https://images.unsplash.com/photo-1621360841013-c76831f1628c?w=600&h=337&fit=crop",
+          "tags": ["数学", "探究"]
+        }
+      ]
+    },
+    {
+      "id": "language_arts",
+      "title": "语言文学",
+      "icon": "book",
+      "items": [
+        {
+          "title": "古诗文解析图鉴",
+          "description": "意境图配合动态解析，让文言文不再枯燥",
+          "url": "#",
+          "thumbnail": "https://images.unsplash.com/photo-1455390582262-044cdead2708?w=600&h=337&fit=crop",
+          "tags": ["语文", "鉴赏"]
+        },
+        {
+          "title": "作文思维导图生成",
+          "description": "快速梳理结构，解决提笔忘字之痛",
+          "url": "#",
+          "thumbnail": "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?w=600&h=337&fit=crop",
+          "tags": ["写作", "全学段"]
+        }
+      ]
+    },
+    {
+      "id": "interactive_tools",
+      "title": "课中互动",
+      "icon": "touch_app",
+      "items": [
+        {
+          "title": "几何画板 Web 版",
+          "description": "能画、能移、能转、能复制的动态交互工具",
+          "url": "#",
+          "thumbnail": "",
+          "tags": ["工具", "交互"]
+        },
+        {
+          "title": "神奇眼镜：分离相融",
+          "description": "跨学科实验互动小游戏",
+          "url": "#",
+          "thumbnail": "",
+          "tags": ["科学", "实验"]
+        },
+        {
+          "title": "数字华容道",
+          "description": "培养逻辑思维与专注力的经典益智游戏",
+          "url": "#",
+          "thumbnail": "",
+          "tags": ["逻辑", "趣味"]
+        },
+        {
+          "title": "互动加水：曹冲称象",
+          "description": "生活中的浮力与等量代换",
+          "url": "#",
+          "thumbnail": "",
+          "tags": ["物理", "经典"]
+        }
+      ]
+    }
+  ]
+}

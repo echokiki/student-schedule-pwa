@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@400;500&display=swap');
+
+:root {
+  /* Anthropic-inspired Minimal Palette */
+  --color-bg-primary: #FAF9F8; /* Soft warm white */
+  --color-bg-secondary: #FFFFFF; /* Pure white for surfacing */
+  --color-bg-sidebar: #F4F3ED; /* Very subtle stone for sidebar depth */
+  --color-bg-hover: #EBEBEB;
+  
+  --color-text-primary: #1A1A1A; /* Charcoal */
+  --color-text-secondary: #5A5A5A;
+  --color-text-muted: #8E8D8A;
+  
+  --color-accent-primary: #D16D53; /* Warm clay terracotta */
+  --color-accent-subtle: #F3EAE8;
+  
+  --color-border-subtle: #E6E4DD;
+  --color-border-strong: #D1CECF;
+  
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  
+  --shadow-float: 0 4px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0,0,0,0.02);
+  
+  --font-serif: 'Noto Serif SC', 'Georgia', serif;
+  --font-sans: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  
+  --transition-fast: 0.15s ease-out;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  font-family: inherit;
+  border: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D1CECF;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #A09E9F;
+}

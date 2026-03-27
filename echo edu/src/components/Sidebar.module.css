@@ -1,0 +1,98 @@
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: var(--color-bg-sidebar);
+  border-right: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  z-index: 20;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+}
+
+.logoIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--color-text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.logoTextWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoText {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+  letter-spacing: 0.5px;
+}
+
+.logoSubtext {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.navigation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow-y: auto;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  font-size: 0.95rem;
+  text-align: left;
+  position: relative;
+  z-index: 10;
+}
+
+.navItem:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.navItem.active {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent-primary);
+  font-weight: 500;
+}
+
+.icon {
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+
+.bottomSection {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  position: relative;
+  z-index: 10;
+}

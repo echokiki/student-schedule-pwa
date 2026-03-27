@@ -159,43 +159,45 @@ function renderSchedule(autoScrollToToday = false) {
 
     // Rendering slots
     const template = DEFAULT_TEMPLATES[wd.key] || [];
-    if (template.length > 0) {
-      const usedIds = new Set();
-      template.forEach((tmpl, i) => {
-        if ((wd.key==='sat'||wd.key==='sun') && i===2 && tmpl.start==='13:00') {
+    let combinedItems = [];
+
+    // 1. Queue actual scheduled slots
+    slots.forEach(s => {
+      combinedItems.push({ type: 'filled', data: s, start: s.start, end: s.end });
+      totalSlots++;
+      totalHours += (timeToMinutes(s.end) - timeToMinutes(s.start)) / 60;
+      uniqueStudents.add(s.studentId);
+      const stu = state.studentsData[s.studentId];
+      if (stu && stu.campus) uniqueCampuses.add(stu.campus);
+    });
+
+    // 2. Queue standard template empty slots (only if they don't overlap with ANY actual slot)
+    template.forEach((tmpl, i) => {
+      const overlaps = slots.some(s => (s.start < tmpl.end) && (s.end > tmpl.start));
+      if (!overlaps) combinedItems.push({ type: 'empty', data: tmpl, start: tmpl.start, end: tmpl.end });
+      
+      // Inject persistent visual lunch break marker on weekends
+      if ((wd.key==='sat' || wd.key==='sun') && i===2 && tmpl.start==='13:00') {
+        combinedItems.push({ type: 'lunch', start: '12:00', end: '13:00' });
+      }
+    });
+
+    // 3. Sort purely chronologically by start time (HH:MM string comparison is safe, or use timeToMinutes)
+    combinedItems.sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
+
+    // 4. Render to column
+    if (combinedItems.length > 0) {
+      combinedItems.forEach(item => {
+        if (item.type === 'filled') {
+          container.appendChild(createFilledSlot(item.data, dateKey));
+        } else if (item.type === 'empty') {
+          container.appendChild(createEmptySlot(item.data, dateKey));
+        } else if (item.type === 'lunch') {
           const ldiv = document.createElement('div');
           ldiv.className = 'time-slot lunch-break';
           ldiv.innerHTML = `<span class="lunch-break-text">🍚 午休 12:00 - 13:00</span>`;
           container.appendChild(ldiv);
         }
-        const match = slots.find(s => s.start === tmpl.start && s.end === tmpl.end && !usedIds.has(s.id));
-        if (match) {
-          usedIds.add(match.id);
-          container.appendChild(createFilledSlot(match, dateKey));
-          totalSlots++;
-          const dur = (timeToMinutes(match.end) - timeToMinutes(match.start))/60;
-          totalHours += dur;
-          uniqueStudents.add(match.studentId);
-          const stu = state.studentsData[match.studentId];
-          if(stu && stu.campus) uniqueCampuses.add(stu.campus);
-        } else {
-          container.appendChild(createEmptySlot(tmpl, dateKey));
-        }
-      });
-      slots.filter(s => !usedIds.has(s.id)).forEach(s => {
-        container.appendChild(createFilledSlot(s, dateKey));
-        totalSlots++;
-        totalHours += (timeToMinutes(s.end) - timeToMinutes(s.start))/60;
-        uniqueStudents.add(s.studentId);
-        if(state.studentsData[s.studentId] && state.studentsData[s.studentId].campus) uniqueCampuses.add(state.studentsData[s.studentId].campus);
-      });
-    } else if (slots.length > 0) {
-      slots.forEach(s => {
-        container.appendChild(createFilledSlot(s, dateKey));
-        totalSlots++;
-        totalHours += (timeToMinutes(s.end) - timeToMinutes(s.start))/60;
-        uniqueStudents.add(s.studentId);
-        if(state.studentsData[s.studentId] && state.studentsData[s.studentId].campus) uniqueCampuses.add(state.studentsData[s.studentId].campus);
       });
     } else {
       const ediv = document.createElement('div');

@@ -1,0 +1,115 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 4rem;
+  background: var(--color-bg-primary);
+  border-bottom: 1px solid var(--color-border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 1rem;
+  width: 350px;
+  transition: border-color var(--transition-fast);
+}
+
+.searchBar:focus-within {
+  border-color: var(--color-accent-primary);
+}
+
+.searchBar span {
+  color: var(--color-text-muted);
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.searchBar input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  outline: none;
+  font-family: var(--font-sans);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.uploadBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--color-text-primary);
+  color: var(--color-bg-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.uploadBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.uploadBtn span {
+  font-size: 1.1rem;
+}
+
+.actionBtn {
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+  display: flex;
+  align-items: center;
+}
+
+.actionBtn:hover {
+  color: var(--color-text-primary);
+}
+
+.actionBtn span {
+  font-size: 1.4rem;
+  font-weight: 300;
+}
+
+.userProfile {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--color-text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-bg-secondary);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: opacity var(--transition-fast);
+}
+
+.userProfile:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 1024px) {
+  .header { padding: 1rem 2rem; }
+}
+
+@media (max-width: 768px) {
+  .header { padding: 1rem; }
+  .searchBar { width: 100%; max-width: 250px; }
+}

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { 
+    margin: 0; 
+    background: #f4efe6; 
+    font-family: system-ui, -apple-system, sans-serif; 
+    user-select: none; 
+    color: #5a5a5a; 
+    overflow: hidden;
+  }
+  .header { display: flex; justify-content: space-between; padding: 20px 40px; align-items: center; }
+  .title { background: #e8e2d8; padding: 8px 16px; border-radius: 20px; font-weight: bold; color: #6b635e; }
+  .controls-top { display: flex; gap: 15px; align-items: center; }
+  .mode-label { color: #d98c63; font-weight: bold; }
+  .btn { background: #e8e2d8; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; color: #555; font-weight: bold; transition: all 0.2s; }
+  .btn.active { background: #d98c63; color: white; }
+  .btn:hover:not(.active) { background: #dfd8ce; }
+  
+  .main-stage { display: flex; justify-content: space-between; height: 65vh; padding: 0 5vw; align-items: center; }
+  
+  .v-slider-container { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 60px; }
+  .v-slider-container input[type=range] { 
+    writing-mode: vertical-lr; 
+    direction: rtl; 
+    appearance: slider-vertical; 
+    height: 180px; 
+    cursor: pointer;
+    accent-color: #d98c63;
+  }
+  .cyl.v-slider-container input[type=range] { accent-color: #50a89d; }
+
+  .svg-container { flex: 1; display: flex; justify-content: center; align-items: flex-end; height: 100%; padding-bottom: 5vh; }
+  
+  .bottom-controls { display: flex; justify-content: center; gap: 10vw; padding: 20px; border-top: 1px dashed #dcd6ce; background: rgba(255,255,255,0.4); height: 25vh;}
+  .obj-controls { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 500;}
+  .obj-controls.cone { color: #d98c63; }
+  .obj-controls.cyl { color: #50a89d; }
+
+  .value-box { background: #f0e6dd; padding: 4px 10px; border-radius: 6px; font-weight: bold; display: inline-block; min-width: 60px; text-align: center;}
+  .obj-controls.cyl .value-box { background: #dcf0ed; }
+
+  .obj-controls input[type=range] {
+    width: 200px;
+    accent-color: #d98c63;
+    margin-top: 5px;
+  }
+  .obj-controls.cyl input[type=range] { accent-color: #50a89d; }
+
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="title">探索圆锥与圆柱的体积关系</div>
+  <div class="controls-top">
+    <span class="mode-label" id="mode-text">高相等</span>
+    <button class="btn active" onclick="nextMode()">切换模式</button>
+    <button class="btn" onclick="reset()">重置</button>
+  </div>
+</div>
+
+<div class="main-stage">
+  <div class="v-slider-container obj-controls cone">
+    <small>圆锥高</small>
+    <div class="value-box" id="vc-h">90.0</div>
+    <input type="range" id="slider-hc" min="20" max="250" value="120" oninput="update('hc', this.value)">
+  </div>
+  
+  <div class="svg-container">
+    <svg id="stage" width="100%" height="100%" viewBox="-300 -300 600 350" preserveAspectRatio="xMidYMAX meet" overflow="visible">
+      <!-- Ground line -->
+      <line x1="-400" y1="0" x2="400" y2="0" stroke="#dcd6ce" stroke-width="2" stroke-dasharray="8,8" />
+      
+      <!-- Cone (Left) -->
+      <g id="cone-group" transform="translate(-120, 0)">
+        <path id="cone-back" fill="none" stroke="#C8704A" stroke-dasharray="4,4" stroke-width="1.5" />
+        <path id="cone-body" fill="rgba(217, 140, 99, 0.7)" stroke="#C8704A" stroke-width="2" stroke-linejoin="round" />
+        <path id="cone-front" fill="none" stroke="#C8704A" stroke-width="2" />
+      </g>
+      
+      <!-- Cylinder (Right) -->
+      <g id="cyl-group" transform="translate(120, 0)">
+        <path id="cyl-back" fill="none" stroke="#68A59B" stroke-dasharray="4,4" stroke-width="1.5" />
+        <path id="cyl-body" fill="rgba(148, 208, 197, 0.7)" stroke="#68A59B" stroke-width="2" stroke-linejoin="round" />
+        <path id="cyl-front" fill="none" stroke="#68A59B" stroke-width="2" />
+        <ellipse id="cyl-top" fill="rgba(148, 208, 197, 0.9)" stroke="#68A59B" stroke-width="2" />
+      </g>
+    </svg>
+  </div>
+
+  <div class="v-slider-container obj-controls cyl">
+    <small>圆柱高</small>
+    <div class="value-box" id="vcy-h">90.0</div>
+    <input type="range" id="slider-hcy" min="20" max="250" value="120" oninput="update('hcy', this.value)">
+  </div>
+</div>
+
+<div class="bottom-controls">
+  <div class="obj-controls cone">
+    <div>体积 V = <span class="value-box" id="vc-v">120.0π</span></div>
+    <div>底面积 S = <span class="value-box" id="vc-s">3.0π</span></div>
+    <input type="range" id="slider-sc" min="1" max="15" value="3" step="0.1" oninput="update('sc', this.value)">
+  </div>
+  
+  <div class="obj-controls cyl">
+    <div>体积 V = <span class="value-box" id="vcy-v">360.0π</span></div>
+    <div>底面积 S = <span class="value-box" id="vcy-s">3.0π</span></div>
+    <input type="range" id="slider-scy" min="1" max="15" value="3" step="0.1" oninput="update('scy', this.value)">
+  </div>
+</div>
+
+<script>
+  const modes = ["无约束", "底面积相等", "高相等", "体积相等"];
+  let currentMode = 2; // 高相等 default
+
+  let hc = 120; // Cone height
+  let sc = 3;  // Cone base area
+  let hcy = 120; // Cyl height
+  let scy = 3; // Cyl base area
+
+  function update(source, val) {
+    val = parseFloat(val);
+    if (source === 'hc') {
+      hc = val;
+      if (currentMode === 2) { hcy = val; document.getElementById('slider-hcy').value = val; } 
+    }
+    else if (source === 'hcy') {
+      hcy = val;
+      if (currentMode === 2) { hc = val; document.getElementById('slider-hc').value = val; }
+    }
+    else if (source === 'sc') {
+      sc = val;
+      if (currentMode === 1) { scy = val; document.getElementById('slider-scy').value = val; } 
+    }
+    else if (source === 'scy') {
+      scy = val;
+      if (currentMode === 1) { sc = val; document.getElementById('slider-sc').value = val; }
+    }
+
+    if (currentMode === 3) {
+      // V_cone = 1/3 * sc * hc. V_cyl = scy * hcy. Set them equal.
+      if (source === 'hc' || source === 'sc') {
+        hcy = (sc * hc) / (3 * scy);
+        // Clamp UI
+        if (hcy > 250) { hcy = 250; scy = (sc * hc) / (3 * hcy); document.getElementById('slider-scy').value = scy; }
+        document.getElementById('slider-hcy').value = hcy;
+      } else {
+        hc = (scy * hcy * 3) / sc;
+        if (hc > 250) { hc = 250; sc = (scy * hcy * 3) / hc; document.getElementById('slider-sc').value = sc; }
+        document.getElementById('slider-hc').value = hc;
+      }
+    }
+
+    draw();
+  }
+
+  function nextMode() {
+    currentMode = (currentMode + 1) % modes.length;
+    document.getElementById('mode-text').innerText = modes[currentMode];
+    if (currentMode === 1) update('sc', sc);
+    if (currentMode === 2) update('hc', hc);
+    if (currentMode === 3) update('hc', hc);
+  }
+
+  function reset() {
+    currentMode = 2;
+    document.getElementById('mode-text').innerText = modes[currentMode];
+    document.getElementById('slider-hc').value = 120;
+    document.getElementById('slider-hcy').value = 120;
+    document.getElementById('slider-sc').value = 3;
+    document.getElementById('slider-scy').value = 3;
+    update('hc', 120);
+    update('sc', 3);
+  }
+
+  function draw() {
+    document.getElementById('vc-h').innerText = hc.toFixed(1);
+    document.getElementById('vcy-h').innerText = hcy.toFixed(1);
+    document.getElementById('vc-s').innerText = sc.toFixed(1) + 'π';
+    document.getElementById('vcy-s').innerText = scy.toFixed(1) + 'π';
+    
+    let volC = (1/3) * sc * hc;
+    let volCy = scy * hcy;
+    document.getElementById('vc-v').innerText = volC.toFixed(1) + 'π';
+    document.getElementById('vcy-v').innerText = volCy.toFixed(1) + 'π';
+
+    let rc = Math.sqrt(sc) * 35; 
+    let rcy = Math.sqrt(scy) * 35;
+    let yRatio = 0.35; 
+
+    // Cone Paths
+    document.getElementById('cone-front').setAttribute('d', `M ${-rc} 0 A ${rc} ${rc*yRatio} 0 0 0 ${rc} 0`);
+    document.getElementById('cone-back').setAttribute('d', `M ${-rc} 0 A ${rc} ${rc*yRatio} 0 0 1 ${rc} 0`);
+    document.getElementById('cone-body').setAttribute('d', `M ${-rc} 0 L 0 ${-hc} L ${rc} 0 A ${rc} ${rc*yRatio} 0 0 1 ${-rc} 0 Z`);
+
+    // Cyl Paths
+    document.getElementById('cyl-front').setAttribute('d', `M ${-rcy} 0 A ${rcy} ${rcy*yRatio} 0 0 0 ${rcy} 0`);
+    document.getElementById('cyl-back').setAttribute('d', `M ${-rcy} 0 A ${rcy} ${rcy*yRatio} 0 0 1 ${rcy} 0`);
+    document.getElementById('cyl-body').setAttribute('d', `M ${-rcy} 0 L ${-rcy} ${-hcy} A ${rcy} ${rcy*yRatio} 0 0 0 ${rcy} ${-hcy} L ${rcy} 0 A ${rcy} ${rcy*yRatio} 0 0 1 ${-rcy} 0 Z`);
+    
+    let topEl = document.getElementById('cyl-top');
+    topEl.setAttribute('cy', -hcy);
+    topEl.setAttribute('rx', rcy);
+    topEl.setAttribute('ry', rcy*yRatio);
+  }
+
+  // Pre-init ensure folders/paths exist
+  draw();
+</script>
+</body>
+</html>
